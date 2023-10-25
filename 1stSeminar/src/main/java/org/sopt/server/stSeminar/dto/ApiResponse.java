@@ -20,9 +20,9 @@ public class ApiResponse {
                 .build();
     }
 
-    public static ApiResponse fail() {
+    public static ApiResponse fail(Integer code) {
         return ApiResponse.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
+                .code(code)
                 .status(Message.fail.toString())
                 .success(false)
                 .build();

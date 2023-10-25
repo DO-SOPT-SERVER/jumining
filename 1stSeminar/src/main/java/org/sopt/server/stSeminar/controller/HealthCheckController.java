@@ -2,6 +2,7 @@ package org.sopt.server.stSeminar.controller;
 
 import org.sopt.server.stSeminar.dto.ApiResponse;
 import org.sopt.server.stSeminar.dto.HealthCheckResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +52,6 @@ public class HealthCheckController {
 
     @GetMapping("/v7")
     public ApiResponse healthCheckV7() {
-        return ApiResponse.fail();
+        return ApiResponse.fail(HttpStatus.BAD_REQUEST.value());
     }
 }
