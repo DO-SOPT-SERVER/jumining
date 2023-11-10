@@ -1,10 +1,12 @@
 package com.example.rdSeminar.service;
 
+import com.example.rdSeminar.domain.Category;
 import com.example.rdSeminar.domain.Member;
 import com.example.rdSeminar.domain.Post;
 import com.example.rdSeminar.dto.request.PostCreateRequest;
 import com.example.rdSeminar.dto.request.PostUpdateRequest;
 import com.example.rdSeminar.dto.response.PostGetResponse;
+import com.example.rdSeminar.repository.CategoryJpaRepository;
 import com.example.rdSeminar.repository.MemberJpaRepository;
 import com.example.rdSeminar.repository.PostJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +23,7 @@ public class PostService {
 
     private final PostJpaRepository postJpaRepository;
     private final MemberJpaRepository memberJpaRepository;
+    private final CategoryService categoryService;
 
     @Transactional
     public String create(PostCreateRequest request, Long memberId) {
@@ -48,15 +51,19 @@ public class PostService {
     }
 
     public List<PostGetResponse> getPosts(Long memberId) {
-        return PostJpaRepository.findAllByMemberId(memberId)
+        return postJpaRepository.findAllByMemberId(memberId)
                 .stream()
-                .map(post -> PostGetResponse.of(post))
+                .map(post -> PostGetResponse.of(post, getCategoryByPost(post)))
                 .toList();
     }
 
     public PostGetResponse getById(Long postId) {
         Post post = postJpaRepository.findById(postId).orElseThrow(()
                 -> new EntityNotFoundException("해당하는 게시글이 없습니다."));
-        return PostGetResponse.of(post);
+        return PostGetResponse.of(post, getCategoryByPost(post));
+    }
+
+    private Category getCategoryByPost(Post post) {
+        return categoryService.getByCategoryId(post.getCategoryId());
     }
 }

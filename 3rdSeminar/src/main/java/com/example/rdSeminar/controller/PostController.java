@@ -20,7 +20,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping
+    @GetMapping("{postId}")
     public ResponseEntity<PostGetResponse> getPostById(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.getById(postId));
     }
@@ -37,14 +37,14 @@ public class PostController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping
+    @PatchMapping("{postId}")
     public ResponseEntity<Void> updatePost(@PathVariable Long postId,
                                            @RequestBody PostUpdateRequest request) {
         postService.editContent(postId, request);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deleteById(postId);
         return ResponseEntity.noContent().build();
